@@ -30,13 +30,16 @@
   .kpis{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
   .kpi{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:var(--muted)}
   .kpi b{color:var(--fg)}
-  h2.sec{font-size:15px;text-transform:none;color:var(--muted);font-weight:600;
+  h2.sec{font-size:15px;color:var(--muted);font-weight:600;
          margin:44px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
   .card{
     background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:22px 22px 18px;margin-bottom:16px;box-shadow:var(--shadow);
   }
   .card h3{margin:0 0 6px;font-size:19px;line-height:1.35}
+  .rank{display:inline-block;font-size:12px;font-weight:700;color:var(--muted);
+        border:1px solid var(--line);border-radius:6px;padding:1px 7px;
+        margin-right:8px;vertical-align:2px}
   .badges{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
   .badge{font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;
          background:var(--accent-soft);color:var(--accent);white-space:nowrap}
@@ -47,6 +50,10 @@
   dd{margin:0}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
        background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+  figure.shot{margin:16px 0}
+  figure.shot img{width:100%;height:auto;display:block;border:1px solid var(--line);
+                  border-radius:10px;background:var(--bg)}
+  figure.shot figcaption{color:var(--muted);font-size:13px;margin-top:8px}
   .links{display:flex;flex-wrap:wrap;gap:10px}
   a.btn{
     display:inline-block;font-size:14.5px;font-weight:600;text-decoration:none;
@@ -64,6 +71,7 @@
     h1{font-size:25px}
     dl{grid-template-columns:1fr;gap:2px 0}
     dt{margin-top:8px;font-size:13.5px}
+    .card{padding:18px 16px 16px}
   }
 </style>
 </head>
@@ -79,9 +87,9 @@
       （商店页面、可执行文件、源码、测试用例）。
     </p>
     <div class="kpis">
-      <span class="kpi"><b>2</b> 个扩展已上架官方商店</span>
+      <span class="kpi"><b>3</b> 个扩展已上架官方商店</span>
+      <span class="kpi">Chrome 商店 2 个扩展累计 <b>500+</b> 用户</span>
       <span class="kpi"><b>24</b> 个自动化测试用例</span>
-      <span class="kpi"><b>5</b> 个公开项目</span>
       <span class="kpi">Python · JavaScript · BLE · WebExtensions</span>
     </div>
   </header>
@@ -90,14 +98,62 @@
 
   <!-- 1 -->
   <article class="card">
-    <h3>PY查价助手 · Steam 比价扩展</h3>
+    <h3><span class="rank">01</span>Gesturefy for Chrome · 鼠标手势扩展移植</h3>
     <div class="badges">
       <span class="badge ok">已上架 Chrome 网上应用店</span>
+      <span class="badge ok">商店评分 5.0</span>
+      <span class="badge">296 位用户</span>
+      <span class="badge">GPL-3.0 · 保留原作者版权</span>
+    </div>
+    <p class="desc">
+      原 Gesturefy 是 Firefox 独占的鼠标手势扩展。我把它移植到 Chrome 并成功上架：
+      按住鼠标左 / 中 / 右键划出手势即可执行命令，80+ 内置命令覆盖标签页、导航、滚动、
+      缩放、复制粘贴等。这是我用户量最大的作品，也是唯一"从读别人代码开始"的项目。
+    </p>
+    <dl>
+      <dt>技术栈</dt>
+      <dd>JavaScript、Rollup 打包、WebExtensions、Chrome Manifest 适配</dd>
+      <dt>我做了什么</dt>
+      <dd>
+        读懂原项目规模不小的核心代码并完成 Chrome 侧适配；<b>模块化改造</b>——把新功能做成
+        独立的内容脚本模块挂载，冻结久经验证的核心引擎不重建，避免改坏已有逻辑；
+        手工录入微软 Edge 官方 16 手势映射供用户一键迁移；新增双击关闭标签页；
+        补齐简体 / 繁体中文界面与隐私政策页。
+      </dd>
+      <dt>上架信息</dt>
+      <dd>
+        版本 1.4.0，2026 年 8 月更新；3 种语言（English / 中文简体 / 中文繁體）；
+        安装包 282 KB；商店声明不收集任何数据（无服务器、无统计、无遥测）。
+      </dd>
+      <dt>说明</dt>
+      <dd>
+        这是移植 / 衍生作品（原作者 Robbendebiene，GPL-3.0），完整保留原始版权声明。
+        我负责 Chrome 适配与模块化改造，不冒认原创。
+      </dd>
+    </dl>
+    <figure class="shot">
+      <img src="assets/gesturefy-for-chrome.png" alt="Gesturefy for Chrome 在 Chrome 网上应用店的商店页，以及扩展的手势设置界面" loading="lazy">
+      <figcaption>Chrome 网上应用店页面，以及扩展自身的手势设置界面</figcaption>
+    </figure>
+    <div class="links">
+      <a class="btn primary" href="https://chromewebstore.google.com/detail/gesturefy-for-chrome/hbffnalphgjfjeecakjjnlfegblimgno" target="_blank" rel="noopener">Chrome 商店页</a>
+      <a class="btn" href="https://github.com/GenmetsuWenxuePress/gesturefy-chrome" target="_blank" rel="noopener">源码与说明</a>
+      <a class="btn" href="https://github.com/Robbendebiene/Gesturefy" target="_blank" rel="noopener">原项目</a>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="card">
+    <h3><span class="rank">02</span>PY查价助手 · Steam 比价扩展</h3>
+    <div class="badges">
+      <span class="badge ok">已上架 Chrome 网上应用店</span>
+      <span class="badge">210 位用户</span>
       <span class="badge">Manifest V3</span>
     </div>
     <p class="desc">
       在 Steam 商店详情页和愿望单上，直接显示第三方市场（SteamPy）的比价面板，
-      按版本（标准版 / 豪华版 / 终极版 / DLC）分行列出代购价与 CDKey 价。
+      按版本（标准版 / 豪华版 / 终极版 / DLC）分行列出代购价与 CDKey 价，
+      方便判断"现在买还是等折扣"。
     </p>
     <dl>
       <dt>技术栈</dt>
@@ -111,15 +167,19 @@
       <dt>说明</dt>
       <dd>基于 2024 年官方版本核心逻辑开发的第三方增强维护版，非官方发布。</dd>
     </dl>
+    <figure class="shot">
+      <img src="assets/py-price-helper.png" alt="PY查价助手在 Chrome 网上应用店的商店页，以及商店页内展示的实际比价面板" loading="lazy">
+      <figcaption>Chrome 网上应用店页面，以及商店页内展示的实际比价面板</figcaption>
+    </figure>
     <div class="links">
       <a class="btn primary" href="https://chromewebstore.google.com/detail/aeapdkmgpgihkiebomafllebjbjpmfok" target="_blank" rel="noopener">Chrome 商店页</a>
       <a class="btn" href="https://github.com/GenmetsuWenxuePress/py-price-helper" target="_blank" rel="noopener">源码</a>
     </div>
   </article>
 
-  <!-- 2 -->
+  <!-- 3 -->
   <article class="card">
-    <h3>网页 Steam 双开 · 多账号容器隔离</h3>
+    <h3><span class="rank">03</span>网页 Steam 双开 · 多账号容器隔离</h3>
     <div class="badges">
       <span class="badge ok">已上架 Firefox Add-ons</span>
       <span class="badge">MPL-2.0</span>
@@ -146,9 +206,9 @@
     </div>
   </article>
 
-  <!-- 3 -->
+  <!-- 4 -->
   <article class="card">
-    <h3>小米手环心率悬浮卡片</h3>
+    <h3><span class="rank">04</span>小米手环心率悬浮卡片</h3>
     <div class="badges">
       <span class="badge ok">已发布免安装 exe</span>
       <span class="badge ok">24 个测试用例全通过</span>
@@ -176,9 +236,9 @@
     </div>
   </article>
 
-  <!-- 4 -->
+  <!-- 5 -->
   <article class="card">
-    <h3>Hermes 无痕模式 · AI Agent 会话不留痕</h3>
+    <h3><span class="rank">05</span>Hermes 无痕模式 · AI Agent 会话不留痕</h3>
     <div class="badges">
       <span class="badge ok">MIT 开源</span>
       <span class="badge">多轮迭代审计</span>
@@ -207,38 +267,6 @@
     </div>
   </article>
 
-  <!-- 5 -->
-  <article class="card">
-    <h3>Gesturefy for Chrome · 鼠标手势扩展移植</h3>
-    <div class="badges">
-      <span class="badge">Chrome 移植版</span>
-      <span class="badge">GPL-3.0 · 保留原作者版权</span>
-    </div>
-    <p class="desc">
-      原 Gesturefy 是 Firefox 独占的鼠标手势扩展。我把它移植到 Chrome：按住鼠标左/中/右键
-      划出手势即可执行命令，80+ 内置命令覆盖标签页、导航、滚动、缩放、复制粘贴等。
-    </p>
-    <dl>
-      <dt>技术栈</dt>
-      <dd>JavaScript、Rollup 打包、WebExtensions、Chrome Manifest 适配</dd>
-      <dt>我做了什么</dt>
-      <dd>
-        读懂原项目规模不小的核心代码并完成 Chrome 侧适配；<b>模块化改造</b>——把新功能做成
-        独立的内容脚本模块挂载，冻结久经验证的核心引擎不重建；手工录入微软 Edge 官方 16 手势映射
-        供用户一键迁移；补齐简体 / 繁体中文界面与隐私政策页。
-      </dd>
-      <dt>说明</dt>
-      <dd>
-        这是移植 / 衍生作品（原作者 Robbendebiene，GPL-3.0），完整保留原始版权声明。
-        我负责 Chrome 适配与模块化改造，不冒认原创。
-      </dd>
-    </dl>
-    <div class="links">
-      <a class="btn primary" href="https://github.com/GenmetsuWenxuePress/gesturefy-chrome" target="_blank" rel="noopener">源码与说明</a>
-      <a class="btn" href="https://github.com/Robbendebiene/Gesturefy" target="_blank" rel="noopener">原项目</a>
-    </div>
-  </article>
-
   <h2 class="sec">开发方式</h2>
   <div class="card">
     <p class="desc" style="margin-bottom:0">
@@ -251,7 +279,7 @@
 
   <footer>
     <p>联系方式见简历。项目源码均以开源许可证发布，各项目版权归属见对应仓库的 LICENSE。</p>
-    <p>本页仅收录个人项目；与任职公司相关的内部工具与业务内容不在此列。</p>
+    <p>本页仅收录个人项目；与任职公司相关的内部工具与业务内容不在此列。商店用户数与评分为截图时数据，会随时间变化。</p>
   </footer>
 
 </div>

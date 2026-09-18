@@ -9,11 +9,13 @@
   :root{
     --bg:#f6f7f9; --card:#ffffff; --fg:#171a1f; --muted:#5b6673; --line:#e4e7ec;
     --accent:#2f6df6; --accent-soft:#eaf1ff; --ok:#0d7a4f; --ok-soft:#e6f6ee;
+    --warn:#8a5a00; --warn-soft:#fdf6e7;
     --shadow:0 1px 2px rgba(16,24,40,.05), 0 8px 24px -12px rgba(16,24,40,.12);
   }
   @media (prefers-color-scheme: dark){
     :root{ --bg:#0e1116; --card:#161a21; --fg:#e9ebee; --muted:#98a2b0; --line:#242a33;
            --accent:#7aa2ff; --accent-soft:#16223c; --ok:#4bd39a; --ok-soft:#0f2a20;
+           --warn:#e8c07a; --warn-soft:#241d10;
            --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.6); }
   }
   *{box-sizing:border-box}
@@ -26,7 +28,12 @@
   header{margin-bottom:40px}
   h1{font-size:30px;line-height:1.3;margin:0 0 10px;letter-spacing:-.01em}
   .role{color:var(--accent);font-weight:600;margin:0 0 14px}
-  .lead{color:var(--muted);margin:0;max-width:62ch}
+  .lead{color:var(--muted);margin:0 0 18px;max-width:62ch}
+  .notice{
+    background:var(--warn-soft);border:1px solid var(--line);border-left:3px solid var(--warn);
+    border-radius:10px;padding:14px 16px;font-size:14.5px;max-width:70ch;
+  }
+  .notice b{color:var(--warn)}
   .kpis{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
   .kpi{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:var(--muted)}
   .kpi b{color:var(--fg)}
@@ -48,6 +55,8 @@
   dl{margin:0 0 16px;display:grid;grid-template-columns:88px 1fr;gap:6px 14px;font-size:15px}
   dt{color:var(--muted)}
   dd{margin:0}
+  dd ul{margin:0;padding-left:18px}
+  dd li{margin:3px 0}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
        background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
   figure.shot{margin:16px 0}
@@ -81,11 +90,14 @@
   <header>
     <h1>唐斌 · 作品集</h1>
     <p class="role">AI 数据标注与质检 ｜ 浏览器扩展 / 桌面工具开发</p>
-    <p class="lead">
-      2 年以上大模型训练数据的标注与质检经验，习惯把工作里的重复操作做成工具。
-      下面这些是我在工作之外独立完成的项目，都开源，且尽量附上可以自己点开验证的东西
-      （商店页面、可执行文件、源码、测试用例）。
+
+    <p class="notice">
+      <b>先说明开发方式：</b>下面这些项目都是<b>人机协作</b>完成的——我提出需求、划定功能范围、
+      在真实环境里逐个版本验证并反馈问题，代码由 AI 生成。因此卡片里的
+      <b>「技术要点」是对项目实现方式的客观描述，不代表每一行代码都是我写的</b>。
+      这件事我不想含糊：写清楚，比说漂亮话有用。
     </p>
+
     <div class="kpis">
       <span class="kpi"><b>3</b> 个扩展已上架官方商店</span>
       <span class="kpi">Chrome 商店 2 个扩展累计 <b>500+</b> 用户</span>
@@ -106,30 +118,27 @@
       <span class="badge">GPL-3.0 · 保留原作者版权</span>
     </div>
     <p class="desc">
-      原 Gesturefy 是 Firefox 独占的鼠标手势扩展。我把它移植到 Chrome 并成功上架：
+      原 Gesturefy 是 Firefox 独占的鼠标手势扩展。这个移植版把它带到 Chrome 并成功上架：
       按住鼠标左 / 中 / 右键划出手势即可执行命令，80+ 内置命令覆盖标签页、导航、滚动、
-      缩放、复制粘贴等。这是我用户量最大的作品，也是唯一"从读别人代码开始"的项目。
+      缩放、复制粘贴等。这是我用户量最大的作品。
     </p>
     <dl>
+      <dt>技术要点</dt>
+      <dd>
+        <ul>
+          <li>保留原扩展的手势识别引擎，Chrome 侧重新适配 Manifest 与权限模型（权限按需申请）</li>
+          <li><b>模块化架构</b>：新增功能（如双击关闭标签页）以独立的内容脚本模块放在 <code>core/extras/</code>，经 manifest 挂载；冻结的核心 <code>content.bundle.js</code> 不重建，避免改坏久经验证的逻辑</li>
+          <li>内置微软 Edge 官方 16 手势映射，Edge 用户可一键迁移</li>
+          <li>80+ 内置命令、摇杆手势（左右键互按）、滚轮手势、自定义用户脚本</li>
+          <li>三语言界面（English / 简体中文 / 繁體中文）与独立隐私政策页</li>
+        </ul>
+      </dd>
       <dt>技术栈</dt>
       <dd>JavaScript、Rollup 打包、WebExtensions、Chrome Manifest 适配</dd>
-      <dt>我做了什么</dt>
-      <dd>
-        读懂原项目规模不小的核心代码并完成 Chrome 侧适配；<b>模块化改造</b>——把新功能做成
-        独立的内容脚本模块挂载，冻结久经验证的核心引擎不重建，避免改坏已有逻辑；
-        手工录入微软 Edge 官方 16 手势映射供用户一键迁移；新增双击关闭标签页；
-        补齐简体 / 繁体中文界面与隐私政策页。
-      </dd>
       <dt>上架信息</dt>
-      <dd>
-        版本 1.4.0，2026 年 8 月更新；3 种语言（English / 中文简体 / 中文繁體）；
-        安装包 282 KB；商店声明不收集任何数据（无服务器、无统计、无遥测）。
-      </dd>
+      <dd>版本 1.4.0，2026 年 8 月更新；安装包 282 KB；商店声明不收集任何数据（无服务器、无统计、无遥测）。</dd>
       <dt>说明</dt>
-      <dd>
-        这是移植 / 衍生作品（原作者 Robbendebiene，GPL-3.0），完整保留原始版权声明。
-        我负责 Chrome 适配与模块化改造，不冒认原创。
-      </dd>
+      <dd>移植 / 衍生作品（原作者 Robbendebiene，GPL-3.0），完整保留原始版权声明，不冒认原创。</dd>
     </dl>
     <figure class="shot">
       <img src="assets/gesturefy-for-chrome.png" alt="Gesturefy for Chrome 在 Chrome 网上应用店的商店页，以及扩展的手势设置界面" loading="lazy">
@@ -156,16 +165,20 @@
       方便判断"现在买还是等折扣"。
     </p>
     <dl>
+      <dt>技术要点</dt>
+      <dd>
+        <ul>
+          <li>Manifest V3；Content Script 不直接发请求，统一委托 Background（Service Worker）代理，规避 CORS 限制</li>
+          <li>Background 侧做<b>域名白名单校验</b>（仅允许目标站点），收敛越权请求面</li>
+          <li>按需查询：仅在点击「PY查价」按钮时才发起请求，减少被风控拦截</li>
+          <li>防抖处理 Steam 新版动态愿望单的超长列表，滚动不卡顿</li>
+          <li>不收集用户信息、不读 Cookies、不后台常驻</li>
+        </ul>
+      </dd>
       <dt>技术栈</dt>
       <dd>JavaScript、Manifest V3、Service Worker、Chrome Storage、防抖</dd>
-      <dt>我做了什么</dt>
-      <dd>
-        Content Script 不直接发请求，统一委托 Background 代理，并在 Background 做
-        <b>域名白名单校验</b>（仅允许目标站点）；查询改为点击触发（按需请求）以规避风控；
-        适配 Steam 新版动态愿望单的超长列表，滚动不卡顿。
-      </dd>
       <dt>说明</dt>
-      <dd>基于 2024 年官方版本核心逻辑开发的第三方增强维护版，非官方发布。</dd>
+      <dd>基于 2024 年官方版本的核心逻辑开发的<b>第三方增强维护版</b>（主要修复原版在新版浏览器与新版 Steam 网页上的兼容性问题），非官方发布。</dd>
     </dl>
     <figure class="shot">
       <img src="assets/py-price-helper.png" alt="PY查价助手在 Chrome 网上应用店的商店页，以及商店页内展示的实际比价面板" loading="lazy">
@@ -189,16 +202,20 @@
       Cookie 环境，在一个浏览器窗口里同时登录多个账号，互不干扰。
     </p>
     <dl>
+      <dt>技术要点</dt>
+      <dd>
+        <ul>
+          <li>基于 Firefox 原生 Contextual Identities 容器 API，为每个账号建立独立 Cookie 环境</li>
+          <li><b>零凭证接触</b>：扩展只管理隔离环境，不读取、不记录、不保存任何账号密码</li>
+          <li>本地 PIN 码锁定账号列表；超长文本备注（悬浮查看，可记余额 / 密钥）；拖拽排序</li>
+          <li>数据仅存 <code>browser.storage.local</code>，不上传任何服务器</li>
+          <li>暗色 UI，对齐 Steam 客户端视觉风格</li>
+        </ul>
+      </dd>
       <dt>技术栈</dt>
       <dd>JavaScript、WebExtensions、Contextual Identities API、browser.storage.local</dd>
-      <dt>我做了什么</dt>
-      <dd>
-        整体功能设计与验收：<b>零凭证接触</b>（扩展绝不读取或保存账号密码）、本地 PIN 码锁定账号列表、
-        长文本备注（悬浮查看余额 / 密钥）、拖拽排序、对齐 Steam 客户端的暗色 UI。
-        所有数据仅存本地浏览器，不上传任何服务器。
-      </dd>
       <dt>说明</dt>
-      <dd>人机协作项目：我负责想法与功能设计，Google Gemini 负责具体代码生成。</dd>
+      <dd>人机协作项目（原文声明）：整体想法与功能设计由我负责，具体代码生成由 Google Gemini 完成。</dd>
     </dl>
     <div class="links">
       <a class="btn primary" href="https://addons.mozilla.org/zh-CN/firefox/addon/%E7%BD%91%E9%A1%B5steam%E5%8F%8C%E5%BC%80/" target="_blank" rel="noopener">Firefox 商店页</a>
@@ -219,14 +236,18 @@
       打恐怖游戏或健身游戏时开着，随时能看到自己心率。
     </p>
     <dl>
-      <dt>技术栈</dt>
-      <dd>Python、PyQt6、蓝牙 BLE（标准心率服务 0x180D / 特征 0x2A37）、PyInstaller</dd>
-      <dt>我做了什么</dt>
+      <dt>技术要点</dt>
       <dd>
-        订阅心率 notify 通知、8 秒无数据自动重连；<b>点击穿透</b>让鼠标直达游戏；
-        透明度只作用于背景与描边（规避 Windows 判定全透明窗口"无可点击内容"的限制）；
-        拖动钳制屏幕内防止丢窗；多设备垂直堆叠；托盘图标 16px + 32px 双尺寸适配。
+        <ul>
+          <li>订阅标准心率服务 notify（服务 0x180D / 特征 0x2A37），8 秒无数据自动重连</li>
+          <li><b>点击穿透</b>让鼠标事件直达下层窗口（如游戏）</li>
+          <li>透明度只作用于背景与描边，并把背景 alpha 钳制到最小 1——规避 Windows 判定"全透明窗口无可点击内容"导致的无法交互</li>
+          <li>拖动位置钳制在屏幕内，防止窗口被拖出屏幕丢失；托盘图标 16px + 32px 双尺寸适配</li>
+          <li>多设备卡片垂直堆叠；PyInstaller 打包单文件免安装 exe</li>
+        </ul>
       </dd>
+      <dt>技术栈</dt>
+      <dd>Python、PyQt6、蓝牙 BLE、PyInstaller</dd>
       <dt>测试</dt>
       <dd>24 个 pytest 用例覆盖配置迁移、心率区间与闪烁逻辑、多卡片布局、透明度像素级验证。</dd>
     </dl>
@@ -241,25 +262,30 @@
     <h3><span class="rank">05</span>Hermes 无痕模式 · AI Agent 会话不留痕</h3>
     <div class="badges">
       <span class="badge ok">MIT 开源</span>
-      <span class="badge">多轮迭代审计</span>
+      <span class="badge">多轮交叉审计</span>
     </div>
     <p class="desc">
-      一个让 AI Agent 会话结束后不在本机留下任何痕迹的方案，采用四层纵深防御架构：
+      一个让 AI Agent 会话结束后不在本机留下痕迹的方案，采用四层纵深防御架构：
       策略层封锁持久化写入、运行时护栏、框架层会话隔离、会话结束后反向审计与安全擦除。
     </p>
     <dl>
+      <dt>技术要点</dt>
+      <dd>
+        <ul>
+          <li>四层纵深防御：能力矩阵封锁持久化写入 / 运行时护栏 / 会话级隔离标记 / 会话后反向审计</li>
+          <li>写入全部限定在时间戳 TTL 沙箱；shell 历史抑制（<code>HISTFILE=/dev/null</code>）</li>
+          <li>7 个缓存目录（web、截图、视频、图片、音频、文档、vision）符号链接进沙箱——崩溃也不留残留</li>
+          <li>日志插件在内存层脱敏（明文不落盘），事后擦除兜底；向量库用哨兵文件细粒度跳过敏感会话</li>
+          <li>会话结束后执行 10 步以上反向审计：残留检测 → <code>os.urandom</code> 覆写 → fsync → 截断 → 删除</li>
+        </ul>
+      </dd>
       <dt>技术栈</dt>
       <dd>Python、Shell、插件式日志过滤器、向量索引哨兵、安全擦除</dd>
-      <dt>我做了什么</dt>
-      <dd>
-        写入全部限定在时间戳沙箱；shell 历史抑制；7 个缓存目录符号链接进沙箱（崩溃也安全）；
-        日志在内存层就已脱敏（明文不落盘）；向量库用哨兵文件细粒度跳过敏感会话；
-        会话结束后执行 <b>10 步以上反向审计</b>：残留检测 → 覆写 → fsync → 截断 → 删除。
-      </dd>
       <dt>说明</dt>
       <dd>
         文档中显式列出"做不到的部分"（操作系统层 swap / core dump、网络层代理与 API 提供方日志、
-        第三方 IDE 监听）——边界写清楚，比假装全能安全。
+        第三方 IDE 监听）——边界写清楚，比假装全能安全。仓库署名：幻灭文学出版社 + Hermes
+        （多轮交叉审计）。
       </dd>
     </dl>
     <div class="links">
@@ -269,11 +295,16 @@
 
   <h2 class="sec">开发方式</h2>
   <div class="card">
+    <p class="desc">
+      所有项目都是同一套做法：我提出需求、划定功能范围、判断哪些方案可行，
+      然后在真实环境里逐个版本验证——把"哪里不对、什么现象"描述清楚交回去改，
+      改完再验一遍，直到能用为止。代码由 AI 生成。
+    </p>
     <p class="desc" style="margin-bottom:0">
-      上面这些项目基本都是<b>人机协作</b>的产物：我负责提出需求、设计功能、判断方案边界、
-      用真实环境验证结果；代码由 AI 生成，我逐项审查并迭代修正。
-      我比较在意的几件事是：给 AI 看原始日志而不是描述症状、每个版本都自己在真实环境跑一遍、
-      做不到的能力诚实标注出来。这套方法我也整理成了文档。
+      我能确定由我完成的部分是：<b>需求定义、方案取舍、真实环境验证、问题定位与反馈、
+      版本迭代的验收</b>，以及上架商店、打包发布、整理文档这些收尾工作。
+      这些正是我在这类任务里最擅长的部分。至于"每一行代码都是我自己写的"这种话，
+      我不会说。
     </p>
   </div>
 

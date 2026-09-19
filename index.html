@@ -49,6 +49,7 @@
   dd{margin:0}
   dd ul{margin:0;padding-left:18px}
   dd li{margin:3px 0}
+  dd li span.stack{display:block;margin-top:2px;color:var(--muted);font-size:13px}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
        background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
   figure.shot{margin:16px 0}
@@ -86,8 +87,7 @@
     <div class="kpis">
       <span class="kpi"><b>3</b> 个扩展已上架官方商店</span>
       <span class="kpi">Chrome 商店 2 个扩展累计 <b>500+</b> 用户</span>
-      <span class="kpi"><b>24</b> 个自动化测试用例</span>
-      <span class="kpi">Python · JavaScript · BLE · WebExtensions</span>
+      <span class="kpi"><b>5</b> 个项目全部开源</span>
     </div>
   </header>
 
@@ -111,15 +111,11 @@
       <dt>技术要点</dt>
       <dd>
         <ul>
-          <li>保留原扩展的手势识别引擎，Chrome 侧重新适配 Manifest 与权限模型（权限按需申请）</li>
-          <li><b>模块化架构</b>：新增功能（如双击关闭标签页）以独立的内容脚本模块放在 <code>core/extras/</code>，经 manifest 挂载；冻结的核心 <code>content.bundle.js</code> 不重建，避免改坏久经验证的逻辑</li>
-          <li>内置微软 Edge 官方 16 手势映射，Edge 用户可一键迁移</li>
-          <li>80+ 内置命令、摇杆手势（左右键互按）、滚轮手势、自定义用户脚本</li>
-          <li>三语言界面（English / 简体中文 / 繁體中文）与独立隐私政策页</li>
+          <li>起点是一个缺口：Gesturefy 只有 Firefox 版，Chrome 用户用不上鼠标手势 → 移植并适配 Chrome 的 Manifest 与权限模型（权限按需申请）<span class="stack">JavaScript · Rollup · WebExtensions</span></li>
+          <li>关键取舍：不重建久经验证的核心手势引擎，新功能（如双击关闭标签页）以独立内容脚本模块挂载，优先保证"不把原有功能改坏"</li>
+          <li>降低上手成本：内置微软 Edge 官方 16 手势映射，Edge 用户可一键迁移；补齐简体 / 繁体中文界面与隐私政策页</li>
         </ul>
       </dd>
-      <dt>技术栈</dt>
-      <dd>JavaScript、Rollup 打包、WebExtensions、Chrome Manifest 适配</dd>
       <dt>上架信息</dt>
       <dd>版本 1.4.0，2026 年 8 月更新；安装包 282 KB；商店声明不收集任何数据（无服务器、无统计、无遥测）。</dd>
     </dl>
@@ -151,15 +147,11 @@
       <dt>技术要点</dt>
       <dd>
         <ul>
-          <li>Manifest V3；Content Script 不直接发请求，统一委托 Background（Service Worker）代理，规避 CORS 限制</li>
-          <li>Background 侧做<b>域名白名单校验</b>（仅允许目标站点），收敛越权请求面</li>
-          <li>按需查询：仅在点击「PY查价」按钮时才发起请求，减少被风控拦截</li>
-          <li>防抖处理 Steam 新版动态愿望单的超长列表，滚动不卡顿</li>
-          <li>不收集用户信息、不读 Cookies、不后台常驻</li>
+          <li>起点是一个麻烦：想买游戏时要在 Steam 和比价站之间来回切换 → 直接在商店页与愿望单注入比价面板<span class="stack">JavaScript · Manifest V3 · Service Worker</span></li>
+          <li>安全取舍：Content Script 不直接发请求，统一委托 Background 代理，并做域名白名单校验，收敛越权请求面</li>
+          <li>刻意克制：只在点击「PY查价」时才请求、不读 Cookies、不后台常驻——宁可多一次点击，也不冒被风控拦截的风险</li>
         </ul>
       </dd>
-      <dt>技术栈</dt>
-      <dd>JavaScript、Manifest V3、Service Worker、Chrome Storage、防抖</dd>
     </dl>
     <figure class="shot">
       <img src="assets/py-price-helper.png" alt="PY查价助手在 Chrome 网上应用店的商店页，以及商店页内展示的实际比价面板" loading="lazy">
@@ -186,15 +178,11 @@
       <dt>技术要点</dt>
       <dd>
         <ul>
-          <li>基于 Firefox 原生 Contextual Identities 容器 API，为每个账号建立独立 Cookie 环境</li>
-          <li><b>零凭证接触</b>：扩展只管理隔离环境，不读取、不记录、不保存任何账号密码</li>
-          <li>本地 PIN 码锁定账号列表；超长文本备注（悬浮查看，可记余额 / 密钥）；拖拽排序</li>
-          <li>数据仅存 <code>browser.storage.local</code>，不上传任何服务器</li>
-          <li>暗色 UI，对齐 Steam 客户端视觉风格</li>
+          <li>起点是一个限制：同一个浏览器没法同时登录两个 Steam 账号 → 用 Firefox 原生容器（Contextual Identities）为每个账号建立独立 Cookie 环境<span class="stack">JavaScript · WebExtensions · browser.storage.local</span></li>
+          <li>安全底线：零凭证接触——扩展只负责隔离环境，不读取、不记录、不保存任何账号密码</li>
+          <li>数据只在本地：账号备注、PIN 锁、排序全部存 browser.storage.local，不上传服务器</li>
         </ul>
       </dd>
-      <dt>技术栈</dt>
-      <dd>JavaScript、WebExtensions、Contextual Identities API、browser.storage.local</dd>
     </dl>
     <div class="links">
       <a class="btn primary" href="https://addons.mozilla.org/zh-CN/firefox/addon/%E7%BD%91%E9%A1%B5steam%E5%8F%8C%E5%BC%80/" target="_blank" rel="noopener">Firefox 商店页</a>
@@ -218,17 +206,11 @@
       <dt>技术要点</dt>
       <dd>
         <ul>
-          <li>订阅标准心率服务 notify（服务 0x180D / 特征 0x2A37），8 秒无数据自动重连</li>
-          <li><b>点击穿透</b>让鼠标事件直达下层窗口（如游戏）</li>
-          <li>透明度只作用于背景与描边，并把背景 alpha 钳制到最小 1——规避 Windows 判定"全透明窗口无可点击内容"导致的无法交互</li>
-          <li>拖动位置钳制在屏幕内，防止窗口被拖出屏幕丢失；托盘图标 16px + 32px 双尺寸适配</li>
-          <li>多设备卡片垂直堆叠；PyInstaller 打包单文件免安装 exe</li>
+          <li>起点是一个需求：打恐怖游戏 / 健身游戏时想实时看到自己心率 → 订阅手环的标准心率广播，做成桌面悬浮卡片<span class="stack">Python · PyQt6 · 蓝牙 BLE · PyInstaller</span></li>
+          <li>两个关键取舍：① 点击穿透，让鼠标事件直达游戏；② 透明度只作用于背景与描边并保留一个最低不透明度——因为 Windows 会把完全透明的窗口判定为"无可点击内容"，追求视觉上全透反而会让整张卡片失去交互</li>
+          <li>交付形态：打包成单文件免安装 exe，手环端只需打开"心率广播"这一项设置</li>
         </ul>
       </dd>
-      <dt>技术栈</dt>
-      <dd>Python、PyQt6、蓝牙 BLE、PyInstaller</dd>
-      <dt>测试</dt>
-      <dd>24 个 pytest 用例覆盖配置迁移、心率区间与闪烁逻辑、多卡片布局、透明度像素级验证。</dd>
     </dl>
     <div class="links">
       <a class="btn primary" href="https://github.com/GenmetsuWenxuePress/miband-heartbeat-hud/releases" target="_blank" rel="noopener">下载 exe</a>
@@ -251,15 +233,11 @@
       <dt>技术要点</dt>
       <dd>
         <ul>
-          <li>四层纵深防御：能力矩阵封锁持久化写入 / 运行时护栏 / 会话级隔离标记 / 会话后反向审计</li>
-          <li>写入全部限定在时间戳 TTL 沙箱；shell 历史抑制（<code>HISTFILE=/dev/null</code>）</li>
-          <li>7 个缓存目录（web、截图、视频、图片、音频、文档、vision）符号链接进沙箱——崩溃也不留残留</li>
-          <li>日志插件在内存层脱敏（明文不落盘），事后擦除兜底；向量库用哨兵文件细粒度跳过敏感会话</li>
-          <li>会话结束后执行 10 步以上反向审计：残留检测 → <code>os.urandom</code> 覆写 → fsync → 截断 → 删除</li>
+          <li>起点是一个矛盾：AI Agent 用起来方便，但会话结束后会在本机留下日志、缓存与临时文件 → 用四层纵深防御把"不留痕"做成可验证的流程<span class="stack">Python · Shell · 插件式日志过滤器</span></li>
+          <li>关键设计：写入全部限定在时间戳沙箱；日志在内存层就完成脱敏（明文不落盘）；向量库用哨兵文件跳过敏感会话</li>
+          <li>最难的一环是"到底清干净没有" → 用 10 步以上反向审计加安全覆写擦除逐项验证，并在文档里写明做不到的部分</li>
         </ul>
       </dd>
-      <dt>技术栈</dt>
-      <dd>Python、Shell、插件式日志过滤器、向量索引哨兵、安全擦除</dd>
     </dl>
     <div class="links">
       <a class="btn primary" href="https://github.com/GenmetsuWenxuePress/hermes-incognito-mode" target="_blank" rel="noopener">源码与架构说明</a>
